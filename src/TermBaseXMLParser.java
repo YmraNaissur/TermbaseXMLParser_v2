@@ -12,18 +12,15 @@ import java.util.List;
  */
 
 public class TermBaseXMLParser {
-    private int termSize = 5; // максимальное количество терминов одного языка
     private int notesSize = 0; // записываем сюда нужно кол-во столбцов под примечания
     private String sourceLanguage; // исходный язык
-    private String targetLanguage; // целевой язык
 
     private List<Entry> entryList = new ArrayList<>();
 
-    private File xmlToBeParsed; // xml-файл с экспортированным словарем
     private Document doc; // здесь будет содержаться xml-структура файла xmlToBeParsed
 
     TermBaseXMLParser(String filePath, String sourceLanguage, String targetLanguage) {
-        xmlToBeParsed = new File(filePath);
+        File xmlToBeParsed = new File(filePath); // xml-файл с экспортированным словарем
 
         try {
             doc = Jsoup.parse(xmlToBeParsed, "UTF-8");
@@ -32,7 +29,6 @@ public class TermBaseXMLParser {
         }
 
         this.sourceLanguage = sourceLanguage;
-        this.targetLanguage = targetLanguage;
         setEntryList();
 
         System.out.println(doc);
@@ -43,6 +39,8 @@ public class TermBaseXMLParser {
     }
 
     void execute(String targetFile) throws IOException {
+        int termSize = 5; // Максимальное количество терминов одного языка
+
         // уравниваем количество элементов в полях объектов Entry
         Entry.adjustList(entryList, termSize);
 
@@ -70,6 +68,7 @@ public class TermBaseXMLParser {
 
                 // Проверяем все элементы term в первом languageGrp
                 List<Element> terms = languageGroups.get(0).getElementsByTag("term");
+
                 // Определяем, являются ли эти термины терминами оригинального языка
                 if (languageGroups.get(0).getElementsByAttributeValue("lang", sourceLanguage).size() > 0) {
                     // Если да, значит заносим их сразу в список оригинальных терминов
@@ -78,7 +77,11 @@ public class TermBaseXMLParser {
                     }
 
                     // Затем ищем все элементы term во втором languageGrp (целевые термины)
-                    terms = languageGroups.get(1).getElementsByTag("term");
+                    if (!(languageGroups.size() < 2)) {
+                        terms = languageGroups.get(1).getElementsByTag("term");
+                    }
+
+
                     for (Element term: terms) {
                         entry.targerTerms.add(term.text());
                     }
