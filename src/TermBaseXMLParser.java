@@ -92,9 +92,11 @@ public class TermBaseXMLParser {
                     }
 
                     // А затем ищем все элементы во втором languageGrp, они будут оригинальными
-                    terms = languageGroups.get(1).getElementsByTag("term");
-                    for (Element term: terms) {
-                        entry.originalTerms.add(term.text());
+                    if (!(languageGroups.size() < 2)) {
+                        terms = languageGroups.get(1).getElementsByTag("term");
+                        for (Element term: terms) {
+                            entry.originalTerms.add(term.text());
+                        }
                     }
                 }
 
