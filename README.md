@@ -8,8 +8,8 @@ ENGLISH
 Hi, my name is Max and I have been working in a translation agency as an administrator of SDL Trados software for a 5 years.
 This software is one of the most used CAT tools and is intended for translators' job automatization. It consists of three main components:
 
-1) SDL GroupShare - a server-size software for managing users, roles, resources etc..
-2) SDL Trados Studio - a client-size workspace for the translation process, which is able to work with a different file types, maintains translation memories and project managaing.
+1) SDL GroupShare - a server-side software for managing users, roles, resources etc..
+2) SDL Trados Studio - a client-side workspace for the translation process, which is able to work with a different file types, maintains translation memories and project managaing.
 3) SDL MultiTerm - a software for managing termbases (glossaries).
 
 Sometimes we need to convert entries from some termbase into other file type to review it or to send it to customer.
