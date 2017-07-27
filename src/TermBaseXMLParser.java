@@ -31,8 +31,6 @@ public class TermBaseXMLParser {
         this.sourceLanguage = sourceLanguage;
         setEntryList();
 
-        System.out.println(doc);
-
         // круто делает отступы в xml, а то стандартный экспорт мультитерма выдает просто сплошняком текст
         // можно будет потом удалить, когда все будет парситься ровно
         //System.out.println(doc);
@@ -59,58 +57,30 @@ public class TermBaseXMLParser {
         List<Element> elements = doc.getElementsByTag("conceptGrp");
 
         for (Element e: elements) {
-            // теперь из каждого conceptgrp выделяем все элементы languageGrp
-            List<Element> languageGroups = e.getElementsByTag("languageGrp");
+            // ищем все элементы, отвечающие за язык
+            List<Element> langElements = e.getElementsByTag("languageGrp");
 
-                // Элементов languageGrp получается два (для оригинального и целевого языков).
-                // Но почему-то бывает, что иногда первым в XML идет оригинальный, язык, а следующим - целевой,
-                // а иногда наоборот
-
-                // Проверяем все элементы term в первом languageGrp
-                List<Element> terms = languageGroups.get(0).getElementsByTag("term");
-
-                // Определяем, являются ли эти термины терминами оригинального языка
-                if (languageGroups.get(0).getElementsByAttributeValue("lang", sourceLanguage).size() > 0) {
-                    // Если да, значит заносим их сразу в список оригинальных терминов
-                    for (Element term: terms) {
-                        entry.originalTerms.add(term.text());
-                    }
-
-                    // Затем ищем все элементы term во втором languageGrp (целевые термины)
-                    if (!(languageGroups.size() < 2)) {
-                        terms = languageGroups.get(1).getElementsByTag("term");
-                    }
-
-
-                    for (Element term: terms) {
-                        entry.targerTerms.add(term.text());
-                    }
-                } else {
-                    // Если нет, значит это целевой язык и мы сначала заносим эти термины в список targetTerms
-                    for (Element term: terms) {
-                        entry.targerTerms.add(term.text());
-                    }
-
-                    // А затем ищем все элементы во втором languageGrp, они будут оригинальными
-                    if (!(languageGroups.size() < 2)) {
-                        terms = languageGroups.get(1).getElementsByTag("term");
-                        for (Element term: terms) {
-                            entry.originalTerms.add(term.text());
-                        }
-                    }
+            // Извлекаем все термины
+            for (Element languageGrp : langElements) {
+                // Если текущий элемент отвечает за исходный язык, то добавляем термины из него в originalTerms
+                if (!languageGrp.getElementsByAttributeValue("lang", sourceLanguage).isEmpty()) {
+                    extractTerms(entry.originalTerms, languageGrp);
+                } else {    // иначе добавляем их в targetTerms
+                    extractTerms(entry.targerTerms, languageGrp);
                 }
+            }
 
-                // Извлекаем все примечания
-                List<Element> notes = e.getElementsByAttributeValue("type", "Note");
-                if (notes.size() > notesSize) {
-                    notesSize = notes.size();
-                }
+            // Извлекаем все примечания
+            List<Element> notes = e.getElementsByAttributeValue("type", "Note");
+            if (notes.size() > notesSize) {
+                notesSize = notes.size();
+            }
 
-                for (Element note: notes) {
-                    if (!entry.notes.contains(note.text())) {
-                        entry.notes.add(note.text());
-                    }
+            for (Element note : notes) {
+                if (!entry.notes.contains(note.text())) {
+                    entry.notes.add(note.text());
                 }
+            }
 
             // добавляем созданную запись в список записей
             entryList.add(entry);
@@ -118,7 +88,22 @@ public class TermBaseXMLParser {
         }
     }
 
-    public List<Entry> getEntryList() {
+    /**
+     * Возвращает список всех извлеченных словарных записей
+     * @return список объектов Entry
+     */
+    List<Entry> getEntryList() {
         return entryList;
+    }
+
+    /**
+     * Извлекает все элементы, находящиеся между тегами term внутри указанного родительского элемента
+     * @param list список, в который нужно будет добавить термины
+     * @param element - родительский элемент, внутри которого нужно найти элементы term
+     */
+    private void extractTerms(List<String> list, Element element) {
+        for (Element term : element.select("term")) {
+            list.add(term.text());
+        }
     }
 }

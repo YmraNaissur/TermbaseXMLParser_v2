@@ -53,6 +53,11 @@ public class Entry {
             result.append(s).append("; ");
         }
 
+        result.append("Notes: ");
+        for (String s : notes) {
+            result.append(s).append("; ");
+        }
+
         result.delete(result.length() - 2, result.length());
 
         return result.toString();

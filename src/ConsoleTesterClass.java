@@ -9,12 +9,12 @@ import java.util.List;
 public class ConsoleTesterClass {
     public static void main(String[] args) throws IOException {
         // создаем объект TermBaseXMLParser, в нем уже будет храниться список разобранных словарных записей
-        TermBaseXMLParser parser = new TermBaseXMLParser("c:/tmp/Belogorsk_en_ru.xml", "EN-GB", "RU");
+        TermBaseXMLParser parser = new TermBaseXMLParser("G:\\tmp\\tank\\tank_ru_en.xml", "RU", "EN-US");
 
         // получаем список словарных записей из созданного выше объекта
-        /*List<Entry> entryList = parser.getEntryList();
+        List<Entry> entryList = parser.getEntryList();
         for (Entry e: entryList) {
             System.out.println(e);
-        }*/
+        }
     }
 }
