@@ -5,7 +5,7 @@ An updated version of the Multiterm XML parser to Excel
 
 ENGLISH
 
-Hi, my name is Max and I have been working in a translation agency as an administrator of SDL Trados software for a 5 years.
+Hi, my name is Max and I have been working in a translation agency as an administrator of SDL Trados software for 5 years.
 This software is one of the most used CAT tools and is intended for translators' job automatization. It consists of three main components:
 
 1) SDL GroupShare - a server-side software for managing users, roles, resources etc..
